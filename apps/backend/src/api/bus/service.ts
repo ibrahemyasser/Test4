@@ -12,9 +12,23 @@ export const busService = {
     try {
       const buses = await busRepository.findAllAsync();
       if (!buses) {
-        return "No Users found";
+        return "No buses found";
       }
       return buses;
+    } catch (ex) {
+      const errorMessage = `Error finding all buses: $${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return "Internal Server Error"; ;
+    }
+  },
+
+  findById: async (id: number): Promise<Bus | string> => {
+    try {
+      const bus = await busRepository.findByIdAsync(id);
+      if (!bus) {
+        return "Bus with that ID doesn't exist";
+      }
+      return bus;
     } catch (ex) {
       const errorMessage = `Error finding all buses: $${(ex as Error).message}`;
       logger.error(errorMessage);
