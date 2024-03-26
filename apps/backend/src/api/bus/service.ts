@@ -7,8 +7,7 @@ import { ResponseStatus, ServiceResponse } from '@/common/models/serviceResponse
 import { logger } from '@/server';
 import { busRepository } from '@/api/bus/repository';
 
-export const userService = {
-  // Retrieves all users from the database
+export const busService = {
   findAll: async (): Promise<Bus[] | string> => {
     try {
       const buses = await busRepository.findAllAsync();
@@ -17,7 +16,7 @@ export const userService = {
       }
       return buses;
     } catch (ex) {
-      const errorMessage = `Error finding all users: $${(ex as Error).message}`;
+      const errorMessage = `Error finding all buses: $${(ex as Error).message}`;
       logger.error(errorMessage);
       return "Internal Server Error"; ;
     }

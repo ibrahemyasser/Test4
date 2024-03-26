@@ -1,9 +1,10 @@
 
 import  { Request, Response } from 'express';
-import { userService } from './service';
-import { handleServiceResponse } from '@/common/utils/httpHandlers';
+import { busService } from './service';
 export class BusController {
     static async getBus(req: Request, res: Response) {
+        const serviceResponse = await busService.findAll();
+        res.send(serviceResponse);
     }
     
 }
