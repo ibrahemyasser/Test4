@@ -6,5 +6,10 @@ export class BusController {
         const serviceResponse = await busService.findAll();
         res.send(serviceResponse);
     }
+    static async getBusById(req: Request, res: Response) {
+        const id = parseInt(req.params.id as string, 10);
+        const serviceResponse = await busService.findById(id);
+        res.send(serviceResponse);
+    }
     
 }

@@ -28,14 +28,14 @@ export const busRouter: Router = (() => {
     res.send(serviceResponse);
   });
 
-//   busRegistry.registerPath({
-//     method: 'get',
-//     path: '/users/{id}',
-//     tags: ['User'],
-//     request: { params: GetBusSchema.shape.params },
-//     responses: createApiResponse(BusSchema, 'Success'),
-//   });
+  busRegistry.registerPath({
+    method: 'get',
+    path: '/buses/{id}',
+    tags: ['Bus'],
+    request: { params: GetBusSchema.shape.params },
+    responses: createApiResponse(BusSchema, 'Success'),
+  });
 
-//   router.get('/:id', validateRequest(GetBusSchema), BusController.getBus);
+  router.get('/:id', validateRequest(GetBusSchema), BusController.getBusById);
   return router;
 })();
