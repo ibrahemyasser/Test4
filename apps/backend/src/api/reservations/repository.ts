@@ -6,7 +6,17 @@ export const reservations: Reservation[] = [
 ];
 
 export const reservationRepository = {
+  findAllAsync: async (): Promise<Reservation[]> => {
+    return reservations;
+  },
 
+  findByIdAsync: async (id: number): Promise<Reservation | null> => {
+    return reservations.find((reservations) => reservations.id === id) || null;
+  },
+
+ findByOwnerIdAsync: async (id: number): Promise<Reservation | null> => {
+    return reservations.find((reservations) => reservations.id_owner === id) || null;
+  },
 
  update : async (id: number, data: Reservation): Promise<Reservation | undefined> => {
   const index = reservations.findIndex(reservation => reservation.id === id);
