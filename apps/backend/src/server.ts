@@ -5,7 +5,11 @@ import { pino } from 'pino';
 
 import { healthCheckRouter } from '@/api/healthCheck/healthCheckRouter';
 import { userRouter } from '@/api/user/router';
+
 import { reservationRouter } from './api/reservations/router';
+
+import { busRouter } from '@/api/bus/router';
+
 import { openAPIRouter } from '@/api-docs/openAPIRouter';
 import errorHandler from '@/common/middleware/errorHandler';
 import rateLimiter from '@/common/middleware/rateLimiter';
@@ -31,6 +35,8 @@ app.use(requestLogger());
 app.use('/health-check', healthCheckRouter);
 app.use('/users', userRouter);
 app.use('/reservations', reservationRouter);
+
+app.use('/buses', busRouter);
 
 // Swagger UI
 app.use(openAPIRouter);
