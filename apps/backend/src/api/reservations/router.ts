@@ -15,7 +15,38 @@ reservationRegistry.register('Reservation', ReservationSchema);
 export const reservationRouter: Router = (() => {
   const router = express.Router();
 
- 
+  reservationRegistry.registerPath({
+    method: 'get',
+    path: '/reservations',
+    tags: ['Reservation'],
+    responses: createApiResponse(z.array(ReservationSchema), 'Success'),
+  });
+
+  router.get('/', ReservationController.apiGetAllreservations);
+
+  reservationRegistry.registerPath({
+    method: 'get',
+    path: '/reservations/{id}',
+    tags: ['Reservation'],
+    request: { params: GetreservationSchema.shape.params },
+    responses: createApiResponse(ReservationSchema, 'Success'),
+  });
+
+  router.get('/:id', validateRequest(GetreservationSchema), ReservationController.apiGetreservationById);
+
+
+
+  reservationRegistry.registerPath({
+    method: 'get',
+    path: '/reservations/owner/{id}',
+    tags: ['Reservation'],
+    request: { params: GetreservationSchema.shape.params },
+    responses: createApiResponse(ReservationSchema, 'Success'),
+  });
+
+  router.get('/owner/:id', validateRequest(GetreservationSchema), ReservationController.apiGetreservationByIdOwner);
+
+
 
   reservationRegistry.registerPath({
     method: 'post',
@@ -56,6 +87,16 @@ export const reservationRouter: Router = (() => {
 
   router.patch('/', validateRequest(updateReservationSchema), ReservationController.apiUpdatereservation);
 
+
+    reservationRegistry.registerPath({
+    method: 'get',
+    path: '/reservations/owner/{id}',
+    tags: ['Reservation'],
+    request: { params: GetreservationSchema.shape.params },
+    responses: createApiResponse(ReservationSchema, 'Success'),
+  });
+
+  router.get('/owner/:id', validateRequest(GetreservationSchema), ReservationController.apiGetreservationByIdOwner);
 
   reservationRegistry.registerPath({
     method: 'delete',
