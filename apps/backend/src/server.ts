@@ -5,7 +5,11 @@ import { pino } from 'pino';
 
 import { healthCheckRouter } from '@/api/healthCheck/healthCheckRouter';
 import { userRouter } from '@/api/user/router';
+
+import { reservationRouter } from './api/reservations/router';
+
 import { busRouter } from '@/api/bus/router';
+
 import { openAPIRouter } from '@/api-docs/openAPIRouter';
 import errorHandler from '@/common/middleware/errorHandler';
 import rateLimiter from '@/common/middleware/rateLimiter';
@@ -22,6 +26,7 @@ app.set('trust proxy', true);
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(helmet());
 app.use(rateLimiter);
+app.use(express.json());
 
 // Request logging
 app.use(requestLogger());
@@ -29,6 +34,8 @@ app.use(requestLogger());
 // Routes
 app.use('/health-check', healthCheckRouter);
 app.use('/users', userRouter);
+app.use('/reservations', reservationRouter);
+
 app.use('/buses', busRouter);
 
 // Swagger UI

@@ -1,8 +1,8 @@
 import { StatusCodes } from 'http-status-codes';
 import request from 'supertest';
 
-import { User } from '@/api/user/model';
-import { users } from '@/api/user/repository';
+import { User } from '@/api/reservations/model';
+import { users } from '@/api/reservations/repository';
 import { ServiceResponse } from '@/common/models/serviceResponse';
 import { app } from '@/server';
 
