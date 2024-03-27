@@ -1,4 +1,3 @@
-
 import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
 
@@ -19,3 +18,11 @@ export const BusSchema = z.object({
 export const GetBusSchema = z.object({
   params: z.object({ id: commonValidations.id }),
 });
+
+export const CreateBusSchema = BusSchema.omit({ id: true, createdAt: true, updatedAt: true });
+
+export const CreateBusRequest = z.object({
+  body: CreateBusSchema,
+});
+
+export type CreateBusDto = z.infer<typeof CreateBusSchema>;

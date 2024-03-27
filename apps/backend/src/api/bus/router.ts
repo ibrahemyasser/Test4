@@ -1,9 +1,8 @@
-
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
 import express, { Request, Response, Router } from 'express';
 import { z } from 'zod';
 
-import { GetBusSchema, BusSchema } from '@/api/bus/model';
+import { GetBusSchema, BusSchema, CreateBusRequest } from '@/api/bus/model';
 import { busService } from '@/api/bus/service';
 import { createApiResponse } from '@/api-docs/openAPIResponseBuilders';
 import { handleServiceResponse, validateRequest } from '@/common/utils/httpHandlers';
@@ -37,5 +36,25 @@ export const busRouter: Router = (() => {
   });
 
   router.get('/:id', validateRequest(GetBusSchema), BusController.getBusById);
+
+  busRegistry.registerPath({
+    method: 'post',
+    path: '/buses',
+    tags: ['Bus'],
+    request: {
+      params: GetBusSchema.shape.params,
+      body: {
+        content: {
+          'application/json': {
+            schema: CreateBusRequest,
+          },
+        },
+        required: true,
+      },
+    },
+    responses: createApiResponse(BusSchema, 'Success'),
+  });
+
+  router.post('/', validateRequest(CreateBusRequest), BusController.createBus);
   return router;
 })();
