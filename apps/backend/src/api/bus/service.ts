@@ -1,5 +1,3 @@
-import { StatusCodes } from 'http-status-codes';
-
 import { Bus, CreateBusDto } from '@/api/bus/model';
 import { userRepository } from '@/api/user/repository';
 import { ResponseStatus, ServiceResponse } from '@/common/models/serviceResponse';
@@ -48,5 +46,13 @@ export const busService = {
       logger.error(errorMessage);
       return `An Error has occured! + ${ex}`;
     }
+  },
+
+  delete: async (id: number): Promise<Bus | undefined> => {
+    return await busRepository.deleteAsync(id);
+  },
+
+  patch: async (id: number, bus: Partial<Bus>): Promise<Bus | undefined> => {
+    return await busRepository.patchAsync(id, bus);
   },
 };

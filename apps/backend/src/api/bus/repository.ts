@@ -58,4 +58,29 @@ export const busRepository = {
     buses.push(newBus);
     return newBus;
   },
+  deleteAsync: async (id: number): Promise<Bus | undefined> => {
+    const resBuses = buses.filter((bus) => bus.id === id);
+    if (resBuses.length === 0) {
+      return;
+    }
+    const index = buses.indexOf(resBuses[0]);
+    buses.splice(index, 1);
+    return resBuses[0];
+  },
+
+  patchAsync: async (id: number, bus: Partial<Bus>): Promise<Bus | undefined> => {
+    const resBuses = buses.filter((bus) => bus.id === id);
+
+    if (resBuses.length === 0) {
+      return;
+    }
+
+    const index = buses.indexOf(resBuses[0]);
+
+    buses[index].name = bus.name ?? buses[index].name;
+    buses[index].areaNumber = bus.areaNumber ?? buses[index].areaNumber;
+    buses[index].updatedAt = new Date();
+
+    return buses[index];
+  },
 };
