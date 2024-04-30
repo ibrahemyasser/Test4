@@ -19,7 +19,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 # CMD [ "pnpm", "start" ]
 
 FROM base AS app2
-COPY --from=build /prod/app2 /prod/app2
+# COPY --from=build /prod/app2 /prod/app2
 # WORKDIR /prod/app2
 EXPOSE 3000
 CMD [ "pnpm","run", "dev"] 
