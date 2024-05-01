@@ -1,11 +1,16 @@
-FROM node:alpine AS base
-RUN apk update && apk add --no-cache npm
+FROM node:18
 
-FROM base AS build
-COPY . /usr/src/app
-WORKDIR /usr/src/app
-RUN npm install -g pnpm
+RUN npm install -g pnpm@8.9.0
+
+WORKDIR /app
+
+#COPY package*.json .turbo .eslintrc.js  .npmrc pnpm*.yaml tsconfig.json turbo.json  ./
+
+
+COPY . .
+
 RUN pnpm install
 
-EXPOSE 3000
-CMD [ "pnpm","run", "dev"] 
+EXPOSE 8080
+
+CMD ["pnpm", "dev"]
