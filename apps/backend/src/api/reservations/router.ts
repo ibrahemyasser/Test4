@@ -2,7 +2,12 @@ import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
 import express, { Request, Response, Router } from 'express';
 import { z } from 'zod';
 
-import { GetreservationSchema, ReservationSchema, createReservationSchema,updateReservationSchema } from '@/api/reservations/model';
+import {
+  GetreservationSchema,
+  ReservationSchema,
+  createReservationSchema,
+  updateReservationSchema,
+} from '@/api/reservations/model';
 import { reservationService } from '@/api/reservations/service';
 import { createApiResponse } from '@/api-docs/openAPIResponseBuilders';
 import { handleServiceResponse, validateRequest } from '@/common/utils/httpHandlers';
@@ -34,8 +39,6 @@ export const reservationRouter: Router = (() => {
 
   router.get('/:id', validateRequest(GetreservationSchema), ReservationController.apiGetreservationById);
 
-
-
   reservationRegistry.registerPath({
     method: 'get',
     path: '/reservations/owner/{id}',
@@ -46,13 +49,11 @@ export const reservationRouter: Router = (() => {
 
   router.get('/owner/:id', validateRequest(GetreservationSchema), ReservationController.apiGetreservationByIdOwner);
 
-
-
   reservationRegistry.registerPath({
     method: 'post',
     path: '/reservations',
     tags: ['Reservation'],
-    request:{
+    request: {
       body: {
         content: {
           'application/json': {
@@ -60,19 +61,18 @@ export const reservationRouter: Router = (() => {
           },
         },
         required: true,
-      },
-     },
+      },
+    },
     responses: createApiResponse(ReservationSchema, 'Success'),
   });
 
   router.post('/', validateRequest(createReservationSchema), ReservationController.apiCreatereservation);
 
-
-   reservationRegistry.registerPath({
+  reservationRegistry.registerPath({
     method: 'patch',
     path: '/reservations',
     tags: ['Reservation'],
-    request:{
+    request: {
       body: {
         content: {
           'application/json': {
@@ -80,15 +80,14 @@ export const reservationRouter: Router = (() => {
           },
         },
         required: true,
-      },
-     },
+      },
+    },
     responses: createApiResponse(ReservationSchema, 'Success'),
   });
 
   router.patch('/', validateRequest(updateReservationSchema), ReservationController.apiUpdatereservation);
 
-
-    reservationRegistry.registerPath({
+  reservationRegistry.registerPath({
     method: 'get',
     path: '/reservations/owner/{id}',
     tags: ['Reservation'],

@@ -7,7 +7,7 @@ import { logger } from '@/server';
 
 export const userService = {
   // Retrieves all users from the database
-  findAll: async (): Promise<ServiceResponse<User[] | null>> => {
+  findAll: async () => {
     try {
       const users = await userRepository.findAllAsync();
       if (!users) {
@@ -22,7 +22,7 @@ export const userService = {
   },
 
   // Retrieves a single user by their ID
-  findById: async (id: number): Promise<ServiceResponse<User | null>> => {
+  findById: async (id: number) => {
     try {
       const user = await userRepository.findByIdAsync(id);
       if (!user) {
@@ -35,4 +35,15 @@ export const userService = {
       return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
+
+  create: async (user: User) => {
+    try {
+      const newUser = await userRepository.createAsync(user);
+      return new ServiceResponse<User>(ResponseStatus.Success, 'User created', newUser, StatusCodes.CREATED);
+    } catch (ex) {
+      const errorMessage = `Error creating user: ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  }
 };

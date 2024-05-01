@@ -1,19 +1,25 @@
 import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
-
+import mongoose, { Schema } from 'mongoose';
 import { commonValidations } from '@/common/utils/commonValidation';
 
 extendZodWithOpenApi(z);
 
-export type User = z.infer<typeof UserSchema>;
-export const UserSchema = z.object({
-  id: z.number(),
+export const userZodSchema = z.object({
   name: z.string(),
   email: z.string().email(),
   age: z.number(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+
 });
+const userSchema = new Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true},
+  age: { type: Number, required: true },
+}, { timestamps: true });
+
+export const UserModel = mongoose.model('User', userSchema);
+
+export type User = z.infer<typeof userZodSchema>
 
 // Input Validation for 'GET users/:id' endpoint
 export const GetUserSchema = z.object({
