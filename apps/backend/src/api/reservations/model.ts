@@ -17,22 +17,19 @@ export const ReservationSchema = z.object({
 });
 
 export const createReservationSchema = z.object({
- body: z.object({
-    
-      ticket_number: z.number(),
-      price: z.number(),
-      id_owner: z.number(),
-      id_trip: z.number(),
-      id_bus: z.number(),
-    
+  body: z.object({
+    ticket_number: z.number(),
+    price: z.number(),
+    id_owner: z.number(),
+    id_trip: z.number(),
+    id_bus: z.number(),
   }),
 });
 
 export const updateReservationSchema = z.object({
- body: z.object({
-    
-      id:z.number(),
-     data: z.object({
+  body: z.object({
+    id: z.number(),
+    data: z.object({
       ticket_number: z.number(),
       price: z.number(),
       id_owner: z.number(),
