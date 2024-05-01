@@ -1,25 +1,11 @@
-FROM node:20-slim AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+FROM node:alpine AS base
+RUN apk update && apk add --no-cache npm
 
 FROM base AS build
 COPY . /usr/src/app
 WORKDIR /usr/src/app
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
-# RUN pnpm run -r build
-# RUN pnpm deploy --filter=app1 --prod /prod/app1 # later when we have frontend
-# RUN pnpm deploy --filter=app2 --prod /prod/app2 # later when we have frontend
+RUN npm install -g pnpm
+RUN pnpm install
 
-# to be setup for the frontend
-# FROM base AS app1
-# COPY --from=build /prod/app1 /prod/app1
-# WORKDIR /prod/app1
-# EXPOSE 8000
-# CMD [ "pnpm", "start" ]
-
-FROM base AS app2
-# COPY --from=build /prod/app2 /prod/app2
-# WORKDIR /prod/app2
 EXPOSE 3000
 CMD [ "pnpm","run", "dev"] 
