@@ -5,29 +5,30 @@ export const busRepository = {
     return BusModel.find().exec();
   },
 
-  findByIdAsync: async (id: number) => {
+  findByIdAsync: async (id: string | undefined) => {
     return BusModel.findById(id).exec();
   },
 
   createAsync: async (bus: CreateBusDto) => {
     return BusModel.create(bus);
   },
-  deleteAsync: async (id: number) => {
+  deleteAsync: async (id: string | undefined) => {
     return BusModel.findByIdAndDelete(id).exec();
   },
 
-  patchAsync: async (id: number, bus: Partial<Bus>) => {
+  patchAsync: async (id: string | undefined, bus: Partial<Bus>) => {
     return BusModel.findByIdAndUpdate(id, bus, { new: true }).exec();
   },
 
-  addReservationAsync: async (id: number, reservationId: number) => {
+  addReservationAsync: async (id: string | undefined, reservationId: string| undefined) => {
+    console.log('id', id);
     return BusModel.findByIdAndUpdate(id, { $push: { reservations: reservationId } }, { new: true }).exec();
   },
 
-  removeReservationAsync: async (id: number, reservationId: number) => {
+  removeReservationAsync: async (id: string | undefined, reservationId: string| undefined) => {
     return BusModel.findByIdAndUpdate(id, { $pull: { reservations: reservationId } }, { new: true }).exec();
   },
-  findReservationsOfBusAsync: async (id: number) => {
+  findReservationsOfBusAsync: async (id: string | undefined) => {
     return BusModel.findById(id).populate('reservations').exec();
   },
 };

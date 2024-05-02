@@ -8,7 +8,7 @@ export class BusController {
   }
 
   static async getBusById(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string, 10);
+    const id = req.params.id;
     const serviceResponse = await busService.findById(id);
     res.send(serviceResponse);
   }
@@ -25,7 +25,7 @@ export class BusController {
 
   static async deleteBus(req: Request, res: Response) {
     try {
-      const id = parseInt(req.params.id as string, 10);
+      const id = req.params.id 
       const serviceResponse = await busService.delete(id);
       res.send(serviceResponse);
     } catch (ex) {
@@ -35,7 +35,7 @@ export class BusController {
 
   static async patchBus(req: Request, res: Response) {
     try {
-      const id = parseInt(req.params.id as string, 10);
+      const id = req.params.id 
       const bus = PatchBusDto.parse(req.body);
       const serviceResponse = await busService.patch(id, bus);
       res.send(serviceResponse);
@@ -45,7 +45,7 @@ export class BusController {
   }
   static async addReservationToBus(req: Request, res: Response) {
     try {
-      const id = parseInt(req.params.id as string, 10);
+      const id = req.params.id 
       const resId = req.body.reservationId;
       const serviceResponse = await busService.addReservationToBus(id, resId);
       res.send(serviceResponse);
@@ -55,7 +55,7 @@ export class BusController {
   }
   static async removeReservationFromBus(req: Request, res: Response) {
     try {
-      const id = parseInt(req.params.id as string, 10);
+      const id = req.params.id 
       const resId = req.body.reservationId;
       const serviceResponse = await busService.removeReservationFromBus(id, resId);
       res.send(serviceResponse);

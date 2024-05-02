@@ -6,15 +6,11 @@ import {
   GetBusSchema,
   BusZodSchema,
   CreateBusRequest,
-  DeleteBusSchema,
-  PatchBusDto,
-  PatchBusRequest,
-  AddReservationToBusRequest,
   RemoveReservationFromBusRequest,
 } from '@/api/bus/model';
 import { busService } from '@/api/bus/service';
 import { createApiResponse } from '@/api-docs/openAPIResponseBuilders';
-import { handleServiceResponse, validateRequest } from '@/common/utils/httpHandlers';
+import { validateRequest } from '@/common/utils/httpHandlers';
 import { BusController } from './controller';
 
 export const busRegistry = new OpenAPIRegistry();
@@ -44,7 +40,7 @@ export const busRouter: Router = (() => {
     responses: createApiResponse(BusZodSchema, 'Success'),
   });
 
-  router.get('/:id', validateRequest(GetBusSchema), BusController.getBusById);
+  router.get('/:id', BusController.getBusById);
 
   busRegistry.registerPath({
     method: 'post',
@@ -64,7 +60,7 @@ export const busRouter: Router = (() => {
     responses: createApiResponse(BusZodSchema, 'Success'),
   });
 
-  router.post('/', validateRequest(CreateBusRequest), BusController.createBus);
+  router.post('/', BusController.createBus);
 
   busRegistry.registerPath({
     method: 'delete',
@@ -76,7 +72,7 @@ export const busRouter: Router = (() => {
     responses: createApiResponse(BusZodSchema, 'Success'),
   });
 
-  router.delete('/:id', validateRequest(DeleteBusSchema), BusController.deleteBus);
+  router.delete('/:id', BusController.deleteBus);
 
   busRegistry.registerPath({
     method: 'delete',
@@ -87,45 +83,49 @@ export const busRouter: Router = (() => {
     },
     responses: createApiResponse(BusZodSchema, 'Success'),
   });
-  router.patch('/:id', validateRequest(PatchBusRequest), BusController.patchBus);
+  router.patch('/:id', BusController.patchBus);
 
   busRegistry.registerPath({
-    method: "post",
-    path: "/buses/{id}/reservations",
-    tags: ["Bus"],
+    method: 'post',
+    path: '/buses/{id}/reservations',
+    tags: ['Bus'],
     request: {
       params: GetBusSchema.shape.params,
       body: {
         content: {
-          "application/json": {
+          'application/json': {
             schema: z.object({ reservationId: z.number() }),
           },
         },
         required: true,
       },
     },
-    responses: createApiResponse(BusZodSchema, "Success"),
+    responses: createApiResponse(BusZodSchema, 'Success'),
   });
-  router.post("/:id/reservations", validateRequest(AddReservationToBusRequest), BusController.addReservationToBus);
+  router.post('/:id/reservations', BusController.addReservationToBus);
 
   busRegistry.registerPath({
-    method: "delete",
-    path: "/buses/{id}/reservations",
-    tags: ["Bus"],
+    method: 'delete',
+    path: '/buses/{id}/reservations',
+    tags: ['Bus'],
     request: {
       params: GetBusSchema.shape.params,
       body: {
         content: {
-          "application/json": {
+          'application/json': {
             schema: z.object({ reservationId: z.number() }),
           },
         },
         required: true,
       },
     },
-    responses: createApiResponse(BusZodSchema, "Success"),
+    responses: createApiResponse(BusZodSchema, 'Success'),
   });
 
-  router.delete("/:id/reservations", validateRequest(RemoveReservationFromBusRequest), BusController.removeReservationFromBus);
+  router.delete(
+    '/:id/reservations',
+    validateRequest(RemoveReservationFromBusRequest),
+    BusController.removeReservationFromBus
+  );
   return router;
 })();

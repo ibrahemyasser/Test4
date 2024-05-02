@@ -1,4 +1,4 @@
-import {  Bus, CreateBusDto } from '@/api/bus/model';
+import { Bus, CreateBusDto } from '@/api/bus/model';
 import { logger } from '@/server';
 import { busRepository } from '@/api/bus/repository';
 
@@ -16,7 +16,7 @@ export const busService = {
       return 'Internal Server Error';
     }
   },
-  addReservationToBus: async (busId:number,resId: number) => {
+  addReservationToBus: async (busId: string | undefined, resId: string) => {
     try {
       const bus = await busRepository.addReservationAsync(busId, resId);
       if (!bus) {
@@ -29,7 +29,7 @@ export const busService = {
       return 'Internal Server Error';
     }
   },
-  removeReservationFromBus: async (busId:number,resId: number) => {
+  removeReservationFromBus: async (busId: string | undefined, resId: string) => {
     try {
       const bus = await busRepository.removeReservationAsync(busId, resId);
       if (!bus) {
@@ -42,7 +42,7 @@ export const busService = {
       return 'Internal Server Error';
     }
   },
-  findById: async (id: number) => {
+  findById: async (id: string | undefined) => {
     try {
       const bus = await busRepository.findByIdAsync(id);
       if (!bus) {
@@ -71,11 +71,11 @@ export const busService = {
     }
   },
 
-  delete: async (id: number) => {
+  delete: async (id: string | undefined) => {
     return await busRepository.deleteAsync(id);
   },
 
-  patch: async (id: number, bus: Partial<Bus>) => {
+  patch: async (id: string | undefined, bus: Partial<Bus>) => {
     return await busRepository.patchAsync(id, bus);
   },
 };
