@@ -1,11 +1,9 @@
-import { Bus, CreateBusDto } from '@/api/bus/model';
-import { userRepository } from '@/api/user/repository';
-import { ResponseStatus, ServiceResponse } from '@/common/models/serviceResponse';
+import {  Bus, CreateBusDto } from '@/api/bus/model';
 import { logger } from '@/server';
 import { busRepository } from '@/api/bus/repository';
 
 export const busService = {
-  findAll: async (): Promise<Bus[] | string> => {
+  findAll: async () => {
     try {
       const buses = await busRepository.findAllAsync();
       if (!buses) {
@@ -18,8 +16,33 @@ export const busService = {
       return 'Internal Server Error';
     }
   },
-
-  findById: async (id: number): Promise<Bus | string> => {
+  addReservationToBus: async (busId:number,resId: number) => {
+    try {
+      const bus = await busRepository.addReservationAsync(busId, resId);
+      if (!bus) {
+        return 'Bus with that ID does not exist';
+      }
+      return bus;
+    } catch (ex) {
+      const errorMessage = `Error adding reservation to bus: ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return 'Internal Server Error';
+    }
+  },
+  removeReservationFromBus: async (busId:number,resId: number) => {
+    try {
+      const bus = await busRepository.removeReservationAsync(busId, resId);
+      if (!bus) {
+        return 'Bus with that ID does not exist';
+      }
+      return bus;
+    } catch (ex) {
+      const errorMessage = `Error removing reservation from bus: ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return 'Internal Server Error';
+    }
+  },
+  findById: async (id: number) => {
     try {
       const bus = await busRepository.findByIdAsync(id);
       if (!bus) {
@@ -33,7 +56,7 @@ export const busService = {
     }
   },
 
-  create: async (bus: CreateBusDto): Promise<Bus | string> => {
+  create: async (bus: CreateBusDto) => {
     try {
       const newBus = await busRepository.createAsync(bus);
       if (newBus) {
@@ -48,11 +71,11 @@ export const busService = {
     }
   },
 
-  delete: async (id: number): Promise<Bus | undefined> => {
+  delete: async (id: number) => {
     return await busRepository.deleteAsync(id);
   },
 
-  patch: async (id: number, bus: Partial<Bus>): Promise<Bus | undefined> => {
+  patch: async (id: number, bus: Partial<Bus>) => {
     return await busRepository.patchAsync(id, bus);
   },
 };

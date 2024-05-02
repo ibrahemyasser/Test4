@@ -4,11 +4,13 @@ import { z } from 'zod';
 
 import {
   GetBusSchema,
-  BusSchema,
+  BusZodSchema,
   CreateBusRequest,
   DeleteBusSchema,
   PatchBusDto,
   PatchBusRequest,
+  AddReservationToBusRequest,
+  RemoveReservationFromBusRequest,
 } from '@/api/bus/model';
 import { busService } from '@/api/bus/service';
 import { createApiResponse } from '@/api-docs/openAPIResponseBuilders';
@@ -17,7 +19,7 @@ import { BusController } from './controller';
 
 export const busRegistry = new OpenAPIRegistry();
 
-busRegistry.register('Bus', BusSchema);
+busRegistry.register('Bus', BusZodSchema);
 
 export const busRouter: Router = (() => {
   const router = express.Router();
@@ -26,7 +28,7 @@ export const busRouter: Router = (() => {
     method: 'get',
     path: '/buses',
     tags: ['Bus'],
-    responses: createApiResponse(z.array(BusSchema), 'Success'),
+    responses: createApiResponse(z.array(BusZodSchema), 'Success'),
   });
 
   router.get('/', async (_req: Request, res: Response) => {
@@ -39,7 +41,7 @@ export const busRouter: Router = (() => {
     path: '/buses/{id}',
     tags: ['Bus'],
     request: { params: GetBusSchema.shape.params },
-    responses: createApiResponse(BusSchema, 'Success'),
+    responses: createApiResponse(BusZodSchema, 'Success'),
   });
 
   router.get('/:id', validateRequest(GetBusSchema), BusController.getBusById);
@@ -59,7 +61,7 @@ export const busRouter: Router = (() => {
         required: true,
       },
     },
-    responses: createApiResponse(BusSchema, 'Success'),
+    responses: createApiResponse(BusZodSchema, 'Success'),
   });
 
   router.post('/', validateRequest(CreateBusRequest), BusController.createBus);
@@ -71,7 +73,7 @@ export const busRouter: Router = (() => {
     request: {
       params: GetBusSchema.shape.params,
     },
-    responses: createApiResponse(BusSchema, 'Success'),
+    responses: createApiResponse(BusZodSchema, 'Success'),
   });
 
   router.delete('/:id', validateRequest(DeleteBusSchema), BusController.deleteBus);
@@ -83,9 +85,47 @@ export const busRouter: Router = (() => {
     request: {
       params: GetBusSchema.shape.params,
     },
-    responses: createApiResponse(BusSchema, 'Success'),
+    responses: createApiResponse(BusZodSchema, 'Success'),
+  });
+  router.patch('/:id', validateRequest(PatchBusRequest), BusController.patchBus);
+
+  busRegistry.registerPath({
+    method: "post",
+    path: "/buses/{id}/reservations",
+    tags: ["Bus"],
+    request: {
+      params: GetBusSchema.shape.params,
+      body: {
+        content: {
+          "application/json": {
+            schema: z.object({ reservationId: z.number() }),
+          },
+        },
+        required: true,
+      },
+    },
+    responses: createApiResponse(BusZodSchema, "Success"),
+  });
+  router.post("/:id/reservations", validateRequest(AddReservationToBusRequest), BusController.addReservationToBus);
+
+  busRegistry.registerPath({
+    method: "delete",
+    path: "/buses/{id}/reservations",
+    tags: ["Bus"],
+    request: {
+      params: GetBusSchema.shape.params,
+      body: {
+        content: {
+          "application/json": {
+            schema: z.object({ reservationId: z.number() }),
+          },
+        },
+        required: true,
+      },
+    },
+    responses: createApiResponse(BusZodSchema, "Success"),
   });
 
-  router.patch('/:id', validateRequest(PatchBusRequest), BusController.patchBus);
+  router.delete("/:id/reservations", validateRequest(RemoveReservationFromBusRequest), BusController.removeReservationFromBus);
   return router;
 })();

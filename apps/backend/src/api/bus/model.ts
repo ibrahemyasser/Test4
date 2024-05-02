@@ -1,13 +1,23 @@
 import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
+import mongoose, { Schema } from 'mongoose';
 
 import { commonValidations } from '@/common/utils/commonValidation';
-import { BusController } from './controller';
 
 extendZodWithOpenApi(z);
 
-export type Bus = z.infer<typeof BusSchema>;
-export const BusSchema = z.object({
+export const BusSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    areaNumber: { type: Number, required: true },
+    reservations: [{ type: Schema.Types.ObjectId, ref: 'Reservation' }],
+  },
+  { timestamps: true }
+);
+export const BusModel = mongoose.model<Bus>('Bus', BusSchema);
+
+export type Bus = z.infer<typeof BusZodSchema>;
+export const BusZodSchema = z.object({
   id: z.number(),
   name: z.string(),
   areaNumber: z.number(),
@@ -20,7 +30,7 @@ export const GetBusSchema = z.object({
   params: z.object({ id: commonValidations.id }),
 });
 
-export const CreateBusSchema = BusSchema.omit({ id: true, createdAt: true, updatedAt: true });
+export const CreateBusSchema = BusZodSchema.omit({ id: true, createdAt: true, updatedAt: true });
 
 export const CreateBusRequest = z.object({
   body: CreateBusSchema,
@@ -29,12 +39,23 @@ export const CreateBusRequest = z.object({
 export const DeleteBusSchema = z.object({
   params: z.object({ id: commonValidations.id }),
 });
+
 export const PatchBusRequest = z.object({
   params: z.object({ id: commonValidations.id }),
-  body: BusSchema.omit({ id: true, createdAt: true, updatedAt: true }).partial(),
+  body: BusZodSchema.omit({ id: true, createdAt: true, updatedAt: true }).partial(),
 });
 
-export const PatchBusDto = BusSchema.omit({ id: true, createdAt: true, updatedAt: true }).partial();
+export const AddReservationToBusRequest = z.object({
+  params: z.object({ id: commonValidations.id }),
+  body: z.object({ reservationId: commonValidations.id }),
+});
+
+export const RemoveReservationFromBusRequest = z.object({
+  params: z.object({ id: commonValidations.id }),
+  body: z.object({ reservationId: commonValidations.id }),
+});
+
+export const PatchBusDto = BusZodSchema.omit({ id: true, createdAt: true, updatedAt: true }).partial();
 
 export type CreateBusDto = z.infer<typeof CreateBusSchema>;
 
