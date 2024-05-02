@@ -39,7 +39,7 @@ export const DeleteReservationZodSchema = z.object({
 });
 
 export const updateReservationZodSchema = z.object({
-  body: ReservationZodSchema.omit({ id:true, createdAt: true, updatedAt: true }).partial(),
+  body: ReservationZodSchema.omit({ createdAt: true, updatedAt: true }).partial().extend({ id: z.string() }),
 });
 
 // Input Validation for 'GET users/:id' endpoint

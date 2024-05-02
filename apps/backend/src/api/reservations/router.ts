@@ -8,6 +8,7 @@ import {
   createReservationZodSchema,
   updateReservationZodSchema,
   CreateReservationRequest,
+  DeleteReservationZodSchema,
 } from '@/api/reservations/model';
 import { reservationService } from '@/api/reservations/service';
 import { createApiResponse } from '@/api-docs/openAPIResponseBuilders';
@@ -106,7 +107,7 @@ export const reservationRouter: Router = (() => {
     responses: createApiResponse(ReservationZodSchema, 'Success'),
   });
 
-  router.delete('/:id', validateRequest(GetReservationZodSchema), ReservationController.apiDeletereservation);
+  router.delete('/:id', validateRequest(DeleteReservationZodSchema), ReservationController.apiDeletereservation);
 
   return router;
 })();
