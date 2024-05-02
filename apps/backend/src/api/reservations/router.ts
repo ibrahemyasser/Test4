@@ -3,10 +3,11 @@ import express, { Request, Response, Router } from 'express';
 import { z } from 'zod';
 
 import {
-  GetreservationSchema,
-  ReservationSchema,
-  createReservationSchema,
-  updateReservationSchema,
+  GetReservationZodSchema,
+  ReservationZodSchema,
+  createReservationZodSchema,
+  updateReservationZodSchema,
+  CreateReservationRequest,
 } from '@/api/reservations/model';
 import { reservationService } from '@/api/reservations/service';
 import { createApiResponse } from '@/api-docs/openAPIResponseBuilders';
@@ -15,7 +16,7 @@ import { ReservationController } from './controller';
 
 export const reservationRegistry = new OpenAPIRegistry();
 
-reservationRegistry.register('Reservation', ReservationSchema);
+reservationRegistry.register('Reservation', ReservationZodSchema);
 
 export const reservationRouter: Router = (() => {
   const router = express.Router();
@@ -24,7 +25,7 @@ export const reservationRouter: Router = (() => {
     method: 'get',
     path: '/reservations',
     tags: ['Reservation'],
-    responses: createApiResponse(z.array(ReservationSchema), 'Success'),
+    responses: createApiResponse(z.array(ReservationZodSchema), 'Success'),
   });
 
   router.get('/', ReservationController.apiGetAllreservations);
@@ -33,21 +34,21 @@ export const reservationRouter: Router = (() => {
     method: 'get',
     path: '/reservations/{id}',
     tags: ['Reservation'],
-    request: { params: GetreservationSchema.shape.params },
-    responses: createApiResponse(ReservationSchema, 'Success'),
+    request: { params: GetReservationZodSchema.shape.params },
+    responses: createApiResponse(ReservationZodSchema, 'Success'),
   });
 
-  router.get('/:id', validateRequest(GetreservationSchema), ReservationController.apiGetreservationById);
+  router.get('/:id', validateRequest(GetReservationZodSchema), ReservationController.apiGetreservationById);
 
   reservationRegistry.registerPath({
     method: 'get',
     path: '/reservations/owner/{id}',
     tags: ['Reservation'],
-    request: { params: GetreservationSchema.shape.params },
-    responses: createApiResponse(ReservationSchema, 'Success'),
+    request: { params: GetReservationZodSchema.shape.params },
+    responses: createApiResponse(ReservationZodSchema, 'Success'),
   });
 
-  router.get('/owner/:id', validateRequest(GetreservationSchema), ReservationController.apiGetreservationByIdOwner);
+  router.get('/owner/:id', validateRequest(GetReservationZodSchema), ReservationController.apiGetreservationByIdOwner);
 
   reservationRegistry.registerPath({
     method: 'post',
@@ -57,16 +58,16 @@ export const reservationRouter: Router = (() => {
       body: {
         content: {
           'application/json': {
-            schema: createReservationSchema,
+            schema: createReservationZodSchema,
           },
         },
         required: true,
       },
     },
-    responses: createApiResponse(ReservationSchema, 'Success'),
+    responses: createApiResponse(ReservationZodSchema, 'Success'),
   });
 
-  router.post('/', validateRequest(createReservationSchema), ReservationController.apiCreatereservation);
+  router.post('/', validateRequest(CreateReservationRequest), ReservationController.apiCreatereservation);
 
   reservationRegistry.registerPath({
     method: 'patch',
@@ -76,36 +77,36 @@ export const reservationRouter: Router = (() => {
       body: {
         content: {
           'application/json': {
-            schema: updateReservationSchema,
+            schema: updateReservationZodSchema,
           },
         },
         required: true,
       },
     },
-    responses: createApiResponse(ReservationSchema, 'Success'),
+    responses: createApiResponse(ReservationZodSchema, 'Success'),
   });
 
-  router.patch('/', validateRequest(updateReservationSchema), ReservationController.apiUpdatereservation);
+  router.patch('/', validateRequest(updateReservationZodSchema), ReservationController.apiUpdatereservation);
 
   reservationRegistry.registerPath({
     method: 'get',
     path: '/reservations/owner/{id}',
     tags: ['Reservation'],
-    request: { params: GetreservationSchema.shape.params },
-    responses: createApiResponse(ReservationSchema, 'Success'),
+    request: { params: GetReservationZodSchema.shape.params },
+    responses: createApiResponse(ReservationZodSchema, 'Success'),
   });
 
-  router.get('/owner/:id', validateRequest(GetreservationSchema), ReservationController.apiGetreservationByIdOwner);
+  router.get('/owner/:id', validateRequest(GetReservationZodSchema), ReservationController.apiGetreservationByIdOwner);
 
   reservationRegistry.registerPath({
     method: 'delete',
     path: '/reservations/{id}',
     tags: ['Reservation'],
-    request: { params: GetreservationSchema.shape.params },
-    responses: createApiResponse(ReservationSchema, 'Success'),
+    request: { params: GetReservationZodSchema.shape.params },
+    responses: createApiResponse(ReservationZodSchema, 'Success'),
   });
 
-  router.delete('/:id', validateRequest(GetreservationSchema), ReservationController.apiDeletereservation);
+  router.delete('/:id', validateRequest(GetReservationZodSchema), ReservationController.apiDeletereservation);
 
   return router;
 })();
