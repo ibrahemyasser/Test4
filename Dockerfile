@@ -6,7 +6,6 @@ WORKDIR /app
 
 #COPY package*.json .turbo .eslintrc.js  .npmrc pnpm*.yaml tsconfig.json turbo.json  ./
 
-
 COPY . .
 
 RUN pnpm install
