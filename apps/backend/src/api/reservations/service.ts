@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { Reservation } from '@/api/reservations/model';
-import { reservationRepository } from '@/api/reservations/repository';
+import { Reservation } from './model';
+import { reservationRepository } from './repository';
 import { ResponseStatus, ServiceResponse } from '@/common/models/serviceResponse';
 import { logger } from '@/server';
 
@@ -40,15 +40,15 @@ export const reservationService = {
     try {
             
             const newreservation = {
-                id:0,
-                ticket_number: data.ticket_number, 
+                ticketnumber: data.ticketnumber, 
                 price: data.price,
                 id_owner: data.id_owner, 
-                id_trip: data.id_trip,
                 id_bus: data.id_bus,
                 createdAt: new Date(),
+                updatedAt: new Date(),
 
             }
+            console.log(newreservation, 'newreservation');
            const response = await  reservationRepository.push(newreservation);
             if (!response) {
         return new ServiceResponse(ResponseStatus.Failed, 'Reservation not Added', null, StatusCodes.NOT_FOUND);
