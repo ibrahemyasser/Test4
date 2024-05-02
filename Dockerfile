@@ -6,10 +6,14 @@ WORKDIR /app
 
 #COPY package*.json .turbo .eslintrc.js  .npmrc pnpm*.yaml tsconfig.json turbo.json  ./
 
+#COPY package*.json ./
+
+#COPY apps/backend/package*.json apps/backend/
 
 COPY . .
 
 RUN pnpm install
+
 
 EXPOSE 8080
 
