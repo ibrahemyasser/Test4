@@ -78,7 +78,7 @@ export const reservationService = {
     }
   },
 
-  updatereservation: async (id: number, data: Reservation): Promise<ServiceResponse<Reservation | null>> => {
+  updatereservation: async (id: string | undefined, data: Reservation): Promise<ServiceResponse<Reservation | null>> => {
     try {
       const updatereservation = await reservationRepository.update(id, data);
       if (!updatereservation) {

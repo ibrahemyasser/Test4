@@ -21,7 +21,7 @@ export const reservationRepository = {
 }).exec();
   },
 
-  update: async (id: number, data: Reservation) => {
+  update: async (id: string | undefined, data: Reservation) => {
    return ReservationModel.findByIdAndUpdate(id, data, { new: true }).exec();
   },
 

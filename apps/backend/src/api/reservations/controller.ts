@@ -27,13 +27,11 @@ export class ReservationController {
 
   static async apiUpdatereservation(req: Request, res: Response) {
     try {
+      console.log("here asdasdasd")
+      console.dir(req.body, null)
       if (!req.body) return res.status(400).json({ error: 'No data provided' });
-      console.log(req.body.id);
-      const id = req.body.id;
-      PatchReservationDto.parse(req.body);
-      console.log(req.body, 'dataaaaaaaaa');
-      console.log(id, '');
-      const serviceResponse = await reservationService.updatereservation(id, req.body);
+
+      const serviceResponse = await reservationService.updatereservation(req.body.id, req.body);
       handleServiceResponse(serviceResponse, res);
     } catch (e) {
       console.log(e);

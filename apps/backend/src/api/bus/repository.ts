@@ -21,7 +21,6 @@ export const busRepository = {
   },
 
   addReservationAsync: async (id: string | undefined, reservationId: string| undefined) => {
-    console.log('id', id);
     return BusModel.findByIdAndUpdate(id, { $push: { reservations: reservationId } }, { new: true }).exec();
   },
 
