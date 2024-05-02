@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { reservationService } from './service';
 import { handleServiceResponse } from '@/common/utils/httpHandlers';
+import { PatchReservationDto } from './model';
 export class ReservationController {
   static async apiGetAllreservations(req: Request, res: Response) {
     const serviceResponse = await reservationService.getAllreservations();
@@ -27,9 +28,12 @@ export class ReservationController {
   static async apiUpdatereservation(req: Request, res: Response) {
     try {
       if (!req.body) return res.status(400).json({ error: 'No data provided' });
-      const id = parseInt(req.body.id as string, 10);
-      console.log(req.body.data, 'dataaaaaaaaa');
-      const serviceResponse = await reservationService.updatereservation(id, req.body.data);
+      console.log(req.body.id);
+      const id = req.body.id;
+      PatchReservationDto.parse(req.body);
+      console.log(req.body, 'dataaaaaaaaa');
+      console.log(id, '');
+      const serviceResponse = await reservationService.updatereservation(id, req.body);
       handleServiceResponse(serviceResponse, res);
     } catch (e) {
       console.log(e);
@@ -37,7 +41,8 @@ export class ReservationController {
   }
 
   static async apiDeletereservation(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string, 10);
+    // const id = parseInt(req.params.id as string, 10);
+    const id = req.body.id;
     const serviceResponse = await reservationService.deletereservation(id);
     console.log(serviceResponse, 'serviceResponse');
     handleServiceResponse(serviceResponse, res);
