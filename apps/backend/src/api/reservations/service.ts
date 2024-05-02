@@ -97,7 +97,7 @@ export const reservationService = {
     }
   },
 
-  deletereservation: async (id: string): Promise<ServiceResponse<Reservation | null>> => {
+  deletereservation: async (id: string | undefined): Promise<ServiceResponse<Reservation | null>> => {
     try {
       const reservation = await reservationRepository.delete(id);
       if (!reservation) {

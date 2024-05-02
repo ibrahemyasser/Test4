@@ -39,7 +39,7 @@ export const reservationRouter: Router = (() => {
     responses: createApiResponse(ReservationZodSchema, 'Success'),
   });
 
-  router.get('/:id', validateRequest(GetReservationZodSchema), ReservationController.apiGetreservationById);
+  router.get('/:id', ReservationController.apiGetreservationById);
 
   reservationRegistry.registerPath({
     method: 'get',
@@ -49,7 +49,7 @@ export const reservationRouter: Router = (() => {
     responses: createApiResponse(ReservationZodSchema, 'Success'),
   });
 
-  router.get('/owner/:id', validateRequest(GetReservationZodSchema), ReservationController.apiGetreservationByIdOwner);
+  router.get('/owner/:id', ReservationController.apiGetreservationByIdOwner);
 
   reservationRegistry.registerPath({
     method: 'post',
@@ -68,7 +68,7 @@ export const reservationRouter: Router = (() => {
     responses: createApiResponse(ReservationZodSchema, 'Success'),
   });
 
-  router.post('/', validateRequest(CreateReservationRequest), ReservationController.apiCreatereservation);
+  router.post('/', ReservationController.apiCreatereservation);
 
   reservationRegistry.registerPath({
     method: 'patch',
@@ -87,7 +87,7 @@ export const reservationRouter: Router = (() => {
     responses: createApiResponse(ReservationZodSchema, 'Success'),
   });
 
-  router.patch('/', validateRequest(updateReservationZodSchema), ReservationController.apiUpdatereservation);
+  router.patch('/', ReservationController.apiUpdatereservation);
 
   reservationRegistry.registerPath({
     method: 'get',
@@ -97,7 +97,7 @@ export const reservationRouter: Router = (() => {
     responses: createApiResponse(ReservationZodSchema, 'Success'),
   });
 
-  router.get('/owner/:id', validateRequest(GetReservationZodSchema), ReservationController.apiGetreservationByIdOwner);
+  router.get('/owner/:id', ReservationController.apiGetreservationByIdOwner);
 
   reservationRegistry.registerPath({
     method: 'delete',
@@ -107,7 +107,7 @@ export const reservationRouter: Router = (() => {
     responses: createApiResponse(ReservationZodSchema, 'Success'),
   });
 
-  router.delete('/:id', validateRequest(DeleteReservationZodSchema), ReservationController.apiDeletereservation);
+  router.delete('/:id', ReservationController.apiDeletereservation);
 
   return router;
 })();

@@ -41,10 +41,8 @@ export class ReservationController {
   }
 
   static async apiDeletereservation(req: Request, res: Response) {
-    // const id = parseInt(req.params.id as string, 10);
-    const id = req.body.id;
+    const id = req.params.id;
     const serviceResponse = await reservationService.deletereservation(id);
-    console.log(serviceResponse, 'serviceResponse');
     handleServiceResponse(serviceResponse, res);
   }
 }

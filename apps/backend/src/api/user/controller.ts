@@ -8,7 +8,6 @@ export class UserController {
         handleServiceResponse(serviceResponse, res);
     }
     static async createUser(req: Request, res: Response) {
-        console.log(req.body);
         const serviceResponse = await userService.create(req.body);
         handleServiceResponse(serviceResponse, res);
     }

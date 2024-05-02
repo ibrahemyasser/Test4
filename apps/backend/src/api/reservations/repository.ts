@@ -29,7 +29,8 @@ export const reservationRepository = {
    return ReservationModel.create(data);
   },
 
-  delete: async (id: number): Promise<Reservation | null> => {
+  delete: async (id: string | undefined): Promise<Reservation | null> => {
+    console.log(id);
    return  ReservationModel.findByIdAndDelete(id).exec();
   },
 };
