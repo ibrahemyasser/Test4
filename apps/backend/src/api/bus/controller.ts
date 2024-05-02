@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { busService } from './service';
-import { Bus, BusSchema, CreateBusRequest, CreateBusSchema, PatchBusDto, PatchBusRequest } from './model';
-import { logger } from '@/server';
+import {  CreateBusSchema, PatchBusDto } from './model';
 export class BusController {
   static async getBus(req: Request, res: Response) {
     const serviceResponse = await busService.findAll();
@@ -27,7 +26,7 @@ export class BusController {
   static async deleteBus(req: Request, res: Response) {
     try {
       const id = parseInt(req.params.id as string, 10);
-      const serviceResponse: Bus | undefined = await busService.delete(id);
+      const serviceResponse = await busService.delete(id);
       res.send(serviceResponse);
     } catch (ex) {
       res.send(`An error has occured ${ex}`);
@@ -39,6 +38,26 @@ export class BusController {
       const id = parseInt(req.params.id as string, 10);
       const bus = PatchBusDto.parse(req.body);
       const serviceResponse = await busService.patch(id, bus);
+      res.send(serviceResponse);
+    } catch (ex) {
+      res.send(`An error has occured ${ex}`);
+    }
+  }
+  static async addReservationToBus(req: Request, res: Response) {
+    try {
+      const id = parseInt(req.params.id as string, 10);
+      const resId = req.body.reservationId;
+      const serviceResponse = await busService.addReservationToBus(id, resId);
+      res.send(serviceResponse);
+    } catch (ex) {
+      res.send(`An error has occured ${ex}`);
+    }
+  }
+  static async removeReservationFromBus(req: Request, res: Response) {
+    try {
+      const id = parseInt(req.params.id as string, 10);
+      const resId = req.body.reservationId;
+      const serviceResponse = await busService.removeReservationFromBus(id, resId);
       res.send(serviceResponse);
     } catch (ex) {
       res.send(`An error has occured ${ex}`);
